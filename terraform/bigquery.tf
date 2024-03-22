@@ -11,6 +11,8 @@ resource "google_bigquery_table" "stored_file_attributes" {
   table_id    = "stored_file_attributes"
   description = "Attributes of objects (files) uploaded to the drop zone bucket and managed by the workflow."
 
+  deletion_protection = false
+
   time_partitioning {
     type          = "DAY"
     field         = "time_created"
