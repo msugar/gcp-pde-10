@@ -23,11 +23,11 @@ def store_file_attributes(cloud_event: CloudEvent):
     name = data["name"]
     size = data["size"]
     #metageneration = data["metageneration"]
-    time_created = time_created["timeCreated"]
-    #updated = time_created["updated"]
+    time_created = data["timeCreated"]
+    #updated = data["updated"]
     #md5_hash = data["md5_hash"]
 
-    print(f"event_id: {event_id}, event_type: {event_type}, bucket: {bucket}, name: {name}, time_created: {time_created}")
+    print(f"File attributes: event_id: {event_id}, event_type: {event_type}, bucket: {bucket}, name: {name}, time_created: {time_created}")
 
     sink_bq_project = os.environ['SINK_BQ_PROJECT']
     sink_bq_dataset = os.environ['SINK_BQ_DATASET']
@@ -43,7 +43,7 @@ def store_file_attributes(cloud_event: CloudEvent):
     
     errors = client.insert_rows_json(table_id, rows_to_insert)  # Make an API request.
     if errors == []:
-        print("New row has been added.")
+        print("File attributes stored")
     else:
-        print("Encountered errors while inserting row: {}".format(errors))
+        print("Encountered errors while storing file attributes: {}".format(errors))
 
