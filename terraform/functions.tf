@@ -60,7 +60,7 @@ resource "google_cloudfunctions2_function" "store_file_attributes" {
     google_project_iam_member.store_file_attributes_sa_iam,
   ]
 
-  name        = "store-file-attributes"
+  name        = "store-file-attributes-2"
   description = "Collects attributes of a file uploaded to the drop zone GCS bucket and saves them into BigQuery."
   location    = var.region
 
