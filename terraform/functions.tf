@@ -8,6 +8,7 @@ locals {
   eventarc_trigger_sa_roles = [
     "roles/eventarc.eventReceiver",
     "roles/cloudfunctions.invoker",
+    "roles/run.invoker",
   ]
 }
 
@@ -18,7 +19,7 @@ resource "google_project_iam_member" "eventarc_trigger_sa_iam" {
   role    = each.key
   member  = google_service_account.eventarc_trigger_sa.member
 
-  depends_on = [google_project_iam_member.gcs-pubsub-publishing]
+  depends_on = [google_project_iam_member.gcs_pubsub_publishing]
 }
 
 resource "google_service_account" "store_file_attributes_sa" {
@@ -49,7 +50,7 @@ resource "google_project_iam_member" "store_file_attributes_sa_iam" {
   role    = each.key
   member  = google_service_account.store_file_attributes_sa.member
 
-  depends_on = [google_project_iam_member.gcs-pubsub-publishing]
+  depends_on = [google_project_iam_member.gcs_pubsub_publishing]
 }
 
 resource "google_cloudfunctions2_function" "store_file_attributes" {
