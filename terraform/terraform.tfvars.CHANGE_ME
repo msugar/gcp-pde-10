@@ -1,0 +1,10 @@
+// CUSTOMIZE: 
+// - Rename this file as `terraform.tfvars`;
+// - Replace the values of the variables below.
+//
+// Note: As most *.tfvars files, this one should *not* be checked into 
+//       version control, either.
+
+project_id = "<YOUR GCP PROJECT ID>"
+region = "<YOUR GCP REGION>"
+
