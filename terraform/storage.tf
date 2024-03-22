@@ -12,7 +12,7 @@ resource "google_storage_bucket" "drop_zone" {
 }
 
 # Grant the pubsub.publisher role to the Cloud Storage service agent
-resource "google_project_iam_member" "gcs-pubsub-publishing" {
+resource "google_project_iam_member" "gcs_pubsub_publishing" {
   project = data.google_project.project.id
   role    = "roles/pubsub.publisher"
   member  = "serviceAccount:${data.google_storage_project_service_account.gcs_sa.email_address}"
@@ -23,7 +23,7 @@ output "cloud_storage_service_agent_email" {
 }
 
 resource "google_storage_bucket" "raw_zone" {
-  name          = "raw-zone--${data.google_project.project.name}-${random_id.bucket_name_suffix.hex}"
+  name          = "raw-zone-${data.google_project.project.name}-${random_id.bucket_name_suffix.hex}"
   location      = var.region
   force_destroy = true
 }
