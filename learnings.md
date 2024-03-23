@@ -2,9 +2,9 @@
 
 ## Questions
 
-1. How to log, or is the logging, from a Cloud Function?
-1. How to force a redeploy of a Cloud Function when the source changes in GCS?
-1. How to deploy using revisions / without interrupting the service?
+1. How to log from a Cloud Function to Cloud Logging?
+1. How to force a redeploy of a Cloud Function when its source changes in GCS?
+1. How to deploy using revisions and/or without interrupting the service?
 
 ## Findings
 ### Terraform Google Cloud provider
