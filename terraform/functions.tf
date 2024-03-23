@@ -53,6 +53,18 @@ resource "google_project_iam_member" "store_file_attributes_sa_iam" {
   depends_on = [google_project_iam_member.gcs_pubsub_publishing]
 }
 
+data "archive_file" "store_file_attributes_zip" {
+  type        = "zip"
+  source_dir  = "${path.module}/../functions/store_file_attributes/"
+  output_path = "${path.module}/../functions/store_file_attributes.zip"
+}
+
+resource "google_storage_bucket_object" "store_file_attributes_zip" {
+  name   = "functions/store_file_attributes.zip"
+  bucket = google_storage_bucket.resources.name
+  source = data.archive_file.store_file_attributes_zip.output_path
+}
+
 resource "google_cloudfunctions2_function" "store_file_attributes" {
   depends_on = [
     google_project_service.apis["cloudfunctions.googleapis.com"],
@@ -63,6 +75,13 @@ resource "google_cloudfunctions2_function" "store_file_attributes" {
   name        = "store-file-attributes"
   description = "Collects attributes of a file uploaded to the drop zone GCS bucket and saves them into BigQuery."
   location    = var.region
+
+  # Everytime the zip is uploaded, the function will be replaced.
+  lifecycle {
+    replace_triggered_by = [
+      google_storage_bucket_object.store_file_attributes_zip
+    ]
+  }
 
   build_config {
     runtime     = "python310"

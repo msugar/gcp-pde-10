@@ -46,15 +46,3 @@ resource "google_storage_bucket" "resources" {
   force_destroy = true
 }
 
-data "archive_file" "store_file_attributes_zip" {
-  type        = "zip"
-  source_dir  = "${path.module}/../functions/store_file_attributes/"
-  output_path = "${path.module}/../functions/store_file_attributes.zip"
-}
-
-resource "google_storage_bucket_object" "store_file_attributes_zip" {
-  name   = "functions/store_file_attributes.zip"
-  bucket = google_storage_bucket.resources.name
-  source = data.archive_file.store_file_attributes_zip.output_path
-}
-
