@@ -60,7 +60,7 @@ resource "google_cloudfunctions2_function" "store_file_attributes" {
     google_project_iam_member.store_file_attributes_sa_iam,
   ]
 
-  name        = "store-file-attributes-2"
+  name        = "store-file-attributes"
   description = "Collects attributes of a file uploaded to the drop zone GCS bucket and saves them into BigQuery."
   location    = var.region
 
@@ -78,8 +78,8 @@ resource "google_cloudfunctions2_function" "store_file_attributes" {
   service_config {
     max_instance_count = 3
     min_instance_count = 1
-    available_memory   = "256Mi"
-    timeout_seconds    = 120
+    available_memory   = "128Mi"
+    timeout_seconds    = 60
     environment_variables = {
       SINK_BQ_PROJECT = google_bigquery_table.stored_file_attributes.project
       SINK_BQ_DATASET = google_bigquery_table.stored_file_attributes.dataset_id
@@ -101,32 +101,4 @@ resource "google_cloudfunctions2_function" "store_file_attributes" {
   }
 }
 
-/*
-# Create an Eventarc trigger, routing Cloud Storage events to Cloud Functions
-resource "google_eventarc_trigger" "drop_zone_storage_object_finalized" {
-  name     = "drop-zone-storage-object-finalized"
-  location = google_cloudfunctions2_function.store_file_attributes.location
 
-  # Capture objects changed in the bucket
-  matching_criteria {
-    attribute = "type"
-    value     = "google.cloud.storage.object.v1.finalized"
-  }
-  matching_criteria {
-    attribute = "bucket"
-    value     = google_storage_bucket.drop_zone.name
-  }
-
-  # Send events to Cloud Function
-  destination {
-    cloud_function = google_cloudfunctions2_function.store_file_attributes.id
-  }
-
-  service_account = google_service_account.eventarc_trigger_sa.email
-
-  depends_on = [
-    google_project_service.apis["eventarc.googleapis.com"],
-    google_project_iam_member.eventarc_trigger_sa_iam
-  ]
-}
-*/
